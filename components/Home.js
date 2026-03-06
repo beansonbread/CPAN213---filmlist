@@ -7,7 +7,7 @@ const api_key = "edc73a6e7c328ce7b027c833d7234082"
 const GAP = 8;
 const H_PADDING = 16;
 
-export default function Home() {
+export default function Home({ navigation }) {
     const [movies, setMovies] = useState([]);
     const { width } = useWindowDimensions();
 
@@ -30,17 +30,25 @@ export default function Home() {
     }
 
     const displayMovie = ({ item }) => {
+        const posterUri = item?.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : undefined;
+        const rating = typeof item?.vote_average === 'number' ? item.vote_average.toFixed(1) : '';
+        const year = item?.release_date ? String(item.release_date).slice(0, 4) : '';
+
         return (
-            <TouchableOpacity onPress={()=> NavigationActivation.navigate("Details", {movie: item})}>
-            <View style={[styles.card, { width: cardWidth }]}>
-                <Image
-                    source={{
-                        uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`
-                    }}
-                    style={styles.Image}
-                />
-                <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-            </View>
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('Details', { movie: item })}
+            >
+                <View style={[styles.card, { width: cardWidth }]}>
+                    <Image
+                        source={posterUri ? { uri: posterUri } : undefined}
+                        style={styles.poster}
+                    />
+                    <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+                    <Text style={styles.subtitle} numberOfLines={1}>
+                        {year}{year && rating ? ' • ' : ''}{rating ? `Rating ${rating}` : ''}
+                    </Text>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -55,7 +63,7 @@ export default function Home() {
                 numColumns={numColumns}
                 columnWrapperStyle={numColumns > 1 ? { marginBottom: GAP, gap: GAP } : undefined}
                 scrollEnabled={true}
-                contentContainerStyle={{ paddingHorizontal: H_PADDING, paddingBottom: 24 }}
+                contentContainerStyle={styles.screenPadding}
             />
         </View>
     )
