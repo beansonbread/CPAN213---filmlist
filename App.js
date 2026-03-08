@@ -1,16 +1,32 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useState } from 'react';
 import Home from "./components/Home";
 import Details from "./components/Details";
 import Favourites from "./components/Favourites";
 import Categories from "./components/Categories";
 import {Ionicons, MaterialIcons} from "@expo/vector-icons"
 import { TouchableOpacity } from 'react-native';
+import {FavouritesContext} from "./components/FavouritesContext";
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [favourites, setFavourites] = useState([]);
+
+const addToFavourites = (movie) => {
+  setFavourites((prev) => {
+    const exists = prev.some((item) => item.id === movie.id);
+    if (exists) return prev;
+    return [...prev, movie];
+  });
+};
+
+const removeFromFavourites = (movieId) => {
+  setFavourites((prev) => prev.filter((item) => item.id !== movieId));
+};
   return (
+  <FavouritesContext.Provider value={{ favourites, addToFavourites, removeFromFavourites }}>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name='Home' component={Home} options={({ navigation }) => ({
@@ -29,6 +45,7 @@ export default function App() {
         <Stack.Screen name='Favourites' component={Favourites} />
         <Stack.Screen name='Categories' component={Categories} />
       </Stack.Navigator>
-    </NavigationContainer>
+        </NavigationContainer>
+  </FavouritesContext.Provider>
   );
 }

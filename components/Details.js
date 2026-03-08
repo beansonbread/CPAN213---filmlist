@@ -1,8 +1,13 @@
+import { useContext } from 'react';
+import {Button} from "react-native";
+import { FavouritesContext } from './FavouritesContext';
 import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { styles } from "./StyleSheet"
 
 export default function Details({ route }) {
+    const { favourites, addToFavourites, removeFromFavourites } = useContext(FavouritesContext);
     const movie = route?.params?.movie;
+    const isFavourite = favourites.some((item) => item.id === movie?.id);
 
     if (!movie) {
         return (
@@ -17,8 +22,12 @@ export default function Details({ route }) {
     const year = movie?.release_date ? String(movie.release_date).slice(0, 4) : '';
 
     const handleFavourite = () => {
-        console.log("added.")
+    if (isFavourite) {
+        removeFromFavourites(movie.id);
+    } else {
+        addToFavourites(movie);
     }
+}
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.screenPadding}>
@@ -35,7 +44,9 @@ export default function Details({ route }) {
             </Text>
             <Text style={styles.detailsOverview}>{movie.overview}</Text>
             <TouchableOpacity style={styles.button} onPress={handleFavourite}>
-                <Text style={styles.buttonText}>Add to Favourites</Text>
+                <Text style={styles.buttonText}>
+    {isFavourite ? "Remove from Favourites" : "Add to Favourites"}
+</Text>
             </TouchableOpacity>
         </ScrollView>
     )

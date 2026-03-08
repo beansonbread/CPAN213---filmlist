@@ -7,8 +7,9 @@ const api_key = "edc73a6e7c328ce7b027c833d7234082"
 const GAP = 8;
 const H_PADDING = 16;
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
     const [movies, setMovies] = useState([]);
+    const selectedGenreId = route?.params?.selectedGenreId;
     const { width } = useWindowDimensions();
 
     const numColumns = width > 600 ? 4 : width > 400 ? 3 : 2;
@@ -28,11 +29,16 @@ export default function Home({ navigation }) {
             console.log(error)
         }
     }
+    const filteredMovies = selectedGenreId
+  ? movies.filter((movie) => movie.genre_ids?.includes(selectedGenreId))
+  : movies;
 
     const displayMovie = ({ item }) => {
         const posterUri = item?.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : undefined;
         const rating = typeof item?.vote_average === 'number' ? item.vote_average.toFixed(1) : '';
         const year = item?.release_date ? String(item.release_date).slice(0, 4) : '';
+
+ 
 
         return (
             <TouchableOpacity
@@ -57,7 +63,7 @@ export default function Home({ navigation }) {
         <View style={styles.container}>
             <FlatList
                 style={styles.list}
-                data={movies}
+                data={filteredMovies}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={displayMovie}
                 numColumns={numColumns}
