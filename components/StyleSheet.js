@@ -82,4 +82,9 @@ export const styles = StyleSheet.create({
       fontSize: 14,
       fontWeight: '600',
     },
+    loadText: {
+      marginTop: '50%',
+      fontSize: 30,
+      textAlign: 'center'
+    }
   });
