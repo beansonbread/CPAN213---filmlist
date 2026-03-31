@@ -1,12 +1,29 @@
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import { styles } from "./StyleSheet";
 import { useNavigation } from "@react-navigation/native";
-import { useContext } from "react";
-import { FavouritesContext } from "./FavouritesContext";
+import { useSelector } from "react-redux";
 
 export default function Favourites() {
   const navigation = useNavigation();
-  const { favourites } = useContext(FavouritesContext);
+  const { favourites, loading, error } = useSelector(
+    (state) => state.favouritesState
+  );
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading favourites...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
