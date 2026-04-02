@@ -6,8 +6,6 @@ const firebaseConfig = {
   authDomain: "filmlist-feb36.firebaseapp.com",
   projectId: "filmlist-feb36",
   storageBucket: "filmlist-feb36.firebasestorage.app",
-  messagingSenderId: "YOUR_REAL_VALUE",
-  appId: "YOUR_REAL_VALUE"
 };
 
 const app = initializeApp(firebaseConfig);
