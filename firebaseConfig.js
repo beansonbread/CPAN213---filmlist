@@ -6,8 +6,8 @@ const firebaseConfig = {
   authDomain: "filmlist-feb36.firebaseapp.com",
   projectId: "filmlist-feb36",
   storageBucket: "filmlist-feb36.firebasestorage.app",
-  
-}
+};
 
-const app = initializeApp(firebaseConfig)
-export const db = getFirestore(app)
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+  
